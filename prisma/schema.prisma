@@ -1,0 +1,187 @@
+// SmartCart AI — Prisma Schema
+// Database: PostgreSQL (Neon Serverless)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+}
+
+// ─────────────────────────────────────────────────────────────────
+// Enums
+// ─────────────────────────────────────────────────────────────────
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum Platform {
+  AMAZON
+  FLIPKART
+}
+
+enum MessageRole {
+  USER
+  ASSISTANT
+}
+
+enum ScrapeStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
+
+// ─────────────────────────────────────────────────────────────────
+// Models
+// ─────────────────────────────────────────────────────────────────
+
+model User {
+  id                 String   @id // Clerk user ID
+  email              String   @unique
+  name               String
+  avatarUrl          String?
+  role               Role     @default(USER)
+  emailNotifications Boolean  @default(true)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  // Relations
+  trackedProducts TrackedProduct[]
+  wishlistItems   WishlistItem[]
+  chatMessages    AiChatMessage[]
+  comparisons     ComparisonSession[]
+
+  @@map("users")
+}
+
+model Product {
+  id           String   @id @default(uuid())
+  url          String   @unique
+  platform     Platform @default(AMAZON)
+  title        String
+  description  String?  @db.Text
+  imageUrl     String?
+  images       String[] // All product images
+  brand        String?
+  category     String?
+  currentPrice Float
+  originalPrice Float?
+  currency     String   @default("INR")
+  rating       Float?
+  reviewCount  Int?
+  availability Boolean  @default(true)
+  features     String[] // Bullet point features
+  asin         String?  // Amazon Standard Identification Number
+
+  // AI generated data
+  aiSummary     Json?   // { pros: [], cons: [], verdict: string, score: number, promptVersion: string }
+  aiVerdict     Int?    // 0-100 buy score
+
+  lastScrapedAt DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  priceHistory     PriceHistory[]
+  trackedBy        TrackedProduct[]
+  wishlistedBy     WishlistItem[]
+  scrapeJobLogs    ScrapeJobLog[]
+  chatMessages     AiChatMessage[]
+  comparisonItems  ComparisonItem[]
+
+  @@map("products")
+}
+
+model PriceHistory {
+  id         Int      @id @default(autoincrement())
+  productId  String
+  price      Float
+  recordedAt DateTime @default(now())
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId, recordedAt])
+  @@map("price_history")
+}
+
+model TrackedProduct {
+  id        Int      @id @default(autoincrement())
+  userId    String
+  productId String
+  addedAt   DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+  @@map("tracked_products")
+}
+
+model WishlistItem {
+  id          Int      @id @default(autoincrement())
+  userId      String
+  productId   String
+  targetPrice Float?
+  notified    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+  @@map("wishlist_items")
+}
+
+model AiChatMessage {
+  id        Int         @id @default(autoincrement())
+  userId    String
+  productId String?
+  role      MessageRole
+  content   String      @db.Text
+  createdAt DateTime    @default(now())
+
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  @@index([userId, productId])
+  @@map("ai_chat_messages")
+}
+
+model ComparisonSession {
+  id        Int      @id @default(autoincrement())
+  userId    String
+  createdAt DateTime @default(now())
+
+  user  User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items ComparisonItem[]
+
+  @@map("comparison_sessions")
+}
+
+model ComparisonItem {
+  id          Int    @id @default(autoincrement())
+  sessionId   Int
+  productId   String
+
+  session ComparisonSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  product Product           @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("comparison_items")
+}
+
+model ScrapeJobLog {
+  id           Int          @id @default(autoincrement())
+  productId    String
+  status       ScrapeStatus @default(PENDING)
+  errorMessage String?
+  durationMs   Int?
+  runAt        DateTime     @default(now())
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId, runAt])
+  @@map("scrape_job_logs")
+}

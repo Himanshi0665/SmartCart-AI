@@ -1,0 +1,385 @@
+@import "tailwindcss";
+
+
+/* ─────────────────────────────────────────────────────────────────
+   Design Tokens — Dark Mode (default)
+───────────────────────────────────────────────────────────────── */
+:root {
+  /* Brand Colors */
+  --brand-primary: 217 91% 60%;        /* #3b82f6 blue */
+  --brand-secondary: 262 83% 68%;      /* #a855f7 purple */
+  --brand-accent: 173 80% 40%;         /* #14b8a6 teal */
+  --brand-warning: 38 92% 50%;         /* #f59e0b amber */
+  --brand-success: 142 71% 45%;        /* #22c55e green */
+  --brand-danger: 0 84% 60%;           /* #ef4444 red */
+
+  /* Dark Theme Backgrounds */
+  --background: 222 47% 5%;            /* #070d1a very dark navy */
+  --background-card: 222 39% 9%;       /* #0f1829 card bg */
+  --background-elevated: 222 35% 12%; /* #141e30 elevated */
+  --background-hover: 222 32% 15%;    /* #1a2640 hover */
+
+  /* Text */
+  --foreground: 210 40% 98%;           /* #f8fafc near white */
+  --foreground-muted: 215 20% 65%;     /* #94a3b8 muted */
+  --foreground-subtle: 215 16% 47%;   /* #64748b subtle */
+
+  /* Borders */
+  --border: 217 32% 17%;              /* #1e2d4a border */
+  --border-strong: 217 32% 25%;       /* #253555 stronger border */
+
+  /* Sidebar */
+  --sidebar-bg: 222 44% 7%;           /* #09101f sidebar */
+  --sidebar-border: 217 32% 13%;      /* #161f33 sidebar border */
+
+  /* Gradient stops */
+  --gradient-from: 217 91% 60%;
+  --gradient-to: 262 83% 68%;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Light Theme
+───────────────────────────────────────────────────────────────── */
+.light {
+  --background: 210 40% 98%;
+  --background-card: 0 0% 100%;
+  --background-elevated: 210 40% 96%;
+  --background-hover: 210 40% 94%;
+
+  --foreground: 222 47% 11%;
+  --foreground-muted: 215 16% 47%;
+  --foreground-subtle: 215 20% 65%;
+
+  --border: 214 32% 91%;
+  --border-strong: 214 32% 82%;
+
+  --sidebar-bg: 210 40% 98%;
+  --sidebar-border: 214 32% 91%;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Base Styles
+───────────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  border-color: hsl(var(--border));
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-feature-settings: "rlig" 1, "calt" 1;
+  min-height: 100vh;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Scrollbar Styling
+───────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: hsl(var(--background-card));
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border-strong));
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--foreground-subtle));
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Glass Morphism Components
+───────────────────────────────────────────────────────────────── */
+.glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.glass-strong {
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.light .glass {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.light .glass-strong {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Gradient Text
+───────────────────────────────────────────────────────────────── */
+.gradient-text {
+  background: linear-gradient(135deg, hsl(217 91% 65%), hsl(262 83% 72%));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-brand {
+  background: linear-gradient(135deg, #60a5fa, #a78bfa, #34d399);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Gradient Backgrounds
+───────────────────────────────────────────────────────────────── */
+.gradient-brand {
+  background: linear-gradient(135deg, hsl(217 91% 60%), hsl(262 83% 68%));
+}
+
+.gradient-hero {
+  background: radial-gradient(
+    ellipse 80% 60% at 50% -10%,
+    hsl(217 91% 60% / 0.15),
+    transparent 70%
+  ), radial-gradient(
+    ellipse 60% 50% at 80% 50%,
+    hsl(262 83% 68% / 0.08),
+    transparent 70%
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Card Styles
+───────────────────────────────────────────────────────────────── */
+.card {
+  background: hsl(var(--background-card));
+  border: 1px solid hsl(var(--border));
+  border-radius: 16px;
+  transition: all 0.2s ease;
+}
+
+.card:hover {
+  border-color: hsl(var(--border-strong));
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px -8px rgba(0, 0, 0, 0.4);
+}
+
+.card-glow:hover {
+  box-shadow: 0 12px 40px -8px rgba(59, 130, 246, 0.15);
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Animations
+───────────────────────────────────────────────────────────────── */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.5s ease forwards;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease forwards;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-pulse-ring {
+  animation: pulse-ring 2s infinite;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Skeleton Loader
+───────────────────────────────────────────────────────────────── */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    hsl(var(--background-elevated)) 25%,
+    hsl(var(--background-hover)) 50%,
+    hsl(var(--background-elevated)) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 8px;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Price Badge
+───────────────────────────────────────────────────────────────── */
+.price-badge {
+  background: linear-gradient(135deg, hsl(142 71% 45% / 0.15), hsl(142 71% 45% / 0.05));
+  border: 1px solid hsl(142 71% 45% / 0.3);
+  color: hsl(142 71% 55%);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.75rem;
+}
+
+.price-badge-danger {
+  background: linear-gradient(135deg, hsl(0 84% 60% / 0.15), hsl(0 84% 60% / 0.05));
+  border: 1px solid hsl(0 84% 60% / 0.3);
+  color: hsl(0 84% 60%);
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Sidebar
+───────────────────────────────────────────────────────────────── */
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: hsl(var(--foreground-muted));
+  transition: all 0.15s ease;
+  text-decoration: none;
+}
+
+.sidebar-link:hover {
+  background: hsl(var(--background-hover));
+  color: hsl(var(--foreground));
+}
+
+.sidebar-link.active {
+  background: linear-gradient(135deg, hsl(217 91% 60% / 0.15), hsl(262 83% 68% / 0.1));
+  color: hsl(217 91% 70%);
+  border: 1px solid hsl(217 91% 60% / 0.2);
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Button Styles
+───────────────────────────────────────────────────────────────── */
+.btn-primary {
+  background: linear-gradient(135deg, hsl(217 91% 58%), hsl(262 83% 65%));
+  color: white;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, hsl(217 91% 65%), hsl(262 83% 72%));
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.btn-primary:hover::before {
+  opacity: 1;
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 25px -5px hsl(217 91% 60% / 0.4);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Verdict Score Ring
+───────────────────────────────────────────────────────────────── */
+.verdict-ring {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Chart Overrides
+───────────────────────────────────────────────────────────────── */
+.recharts-tooltip-wrapper .recharts-default-tooltip {
+  background: hsl(var(--background-elevated)) !important;
+  border: 1px solid hsl(var(--border-strong)) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Selection
+───────────────────────────────────────────────────────────────── */
+::selection {
+  background: hsl(217 91% 60% / 0.3);
+  color: hsl(var(--foreground));
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Focus Ring
+───────────────────────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid hsl(217 91% 60%);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Stagger Animation Delays
+───────────────────────────────────────────────────────────────── */
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.2s; }
+.stagger-3 { animation-delay: 0.3s; }
+.stagger-4 { animation-delay: 0.4s; }
+.stagger-5 { animation-delay: 0.5s; }
