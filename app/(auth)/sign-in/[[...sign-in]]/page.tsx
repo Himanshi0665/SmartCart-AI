@@ -28,7 +28,7 @@ export default function SignInPage() {
           SmartCart AI
         </span>
       </Link>
-      <SignIn />
+      <SignIn routing="hash" />
     </div>
   );
 }
